@@ -1,0 +1,22 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
+
+    environment:
+      DB_DATABASE: Rfam
+      DB_USER: rfamro
+      DB_PORT: 4497
+      DB_HOST: mysql-rfam-public.ebi.ac.uk
+
+    steps:
+      - checkout
+      - run:
+          name: Install MySQL CLI
+          command: |
+            sudo apt-get update -y -qq
+            sudo apt-get install -y -qq --no-install-recommends default-mysql-client
+      - run:
+          name: Connect to Public Rfam Database
+          command: mysql -u $DB_USER -h $DB_HOST -P $DB_PORT -D $DB_DATABASE < script.sql
